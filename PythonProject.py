@@ -34,32 +34,32 @@ soup = BeautifulSoup(books_to_scrape_a_light_in_the_attic_url_response.content, 
 
 # Catputre the Book's Product Page URL
 product_page_url = books_to_scrape_a_light_in_the_attic_url
-book_details['product_page_url'] =product_page_url
+book_details['product_page_url'] = product_page_url
 #print(product_page_url)
 
 # Catputre the Book's Universal Product Code
 universal_product_code = soup.find('th',string='UPC').find_next('td').get_text()  
-book_details['universal_product_code'] =universal_product_code
+book_details['universal_product_code'] = universal_product_code
 #print(universal_product_code)
 
 # Catputre the Book's Title
 book_title = soup.h1.string
-book_details['book_title'] =book_title
+book_details['book_title'] = book_title
 #print(book_title)
 
 # Catputre the Book Price, including tax
 price_including_tax = soup.find('th', string='Price (incl. tax)').find_next('td').get_text()
-book_details['price_including_tax'] =price_including_tax
+book_details['price_including_tax'] = price_including_tax
 #print(price_including_tax)
 
 # Catputre the Book Price, excluding tax
 price_excluding_tax = soup.find('th', string='Price (excl. tax)').find_next('td').get_text()
-book_details['price_excluding_tax'] =price_excluding_tax
+book_details['price_excluding_tax'] = price_excluding_tax
 #print(price_excluding_tax)
 
 # Capature the Number of Books Available
 quantity_available = soup.find('th', string='Availability').find_next('td').get_text()
-book_details['quantity_available'] =quantity_available
+book_details['quantity_available'] = quantity_available
 #print(quantity_available)
 
 # Capture the Book's Description
@@ -68,25 +68,28 @@ product_description = soup.find('div', id='product_description')
 product_description_contents = product_description.find_next_sibling('p').text
 book_details['product_description'] = product_description_contents
 
-#print(book_details["product_description"])
-
-print(book_details)  
-
-"""# Capture the Book's Category
-book_categories = soup.find_all('a')
-if book_categories:
-    category = book_categories[-1].text
-    #print(book_categories[-1].text)
-    print(category)
-
-
-
-    
+# Capture the Book's Review Rating
+review_rating = soup.find('p', class_= 'star-rating Three')
+if review_rating:
+    review_rating_stars = review_rating.find_next_sibling('i')
+    if review_rating_stars:
+        book_details['review_rating'] = review_rating_stars.text
+    else:
+        # Handle the case when the sibling element is not found
+        book_details['review_rating'] = 'Rating information not available'
+else:
+    # Handle the case when the review rating element is not found
+    book_details['review_rating'] = 'Rating information not available'
 
 
 
+#Print the Book Details
+print(book_details)      
 
-"""
+
+
+
+
 """#HTML Locations
 h2_text = soup.h2.string
 h1 = soup.h1.string
