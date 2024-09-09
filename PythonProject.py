@@ -17,51 +17,60 @@ book_details = {
     "image_url" : ""
 }
 
-#Access Books to Scrape Web Page
+"""#Access Books to Scrape Web Page
 books_to_scrape_url = "https://books.toscrape.com/"
 books_to_scrape_url_response = get(books_to_scrape_url)
-#print(books_to_scrape_url_response.content)
+#print(books_to_scrape_url_response.content)"""
 
 #Access Books to Scrape A Light in the Attic Book Web Page
 books_to_scrape_a_light_in_the_attic_url = "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html"
 books_to_scrape_a_light_in_the_attic_url_response = get(books_to_scrape_a_light_in_the_attic_url)
 
-#A Light in the Attic Parsed HTML
-page = get(books_to_scrape_a_light_in_the_attic_url)
-soup = BeautifulSoup(page.content, 'html.parser')
+# A Light in the Attic Parsed HTML
+soup = BeautifulSoup(books_to_scrape_a_light_in_the_attic_url_response.content, 'html.parser')
 #print(soup)
 
 # Get the Book Details
 
 # Catputre the Book's Product Page URL
 product_page_url = books_to_scrape_a_light_in_the_attic_url
-print(product_page_url)
+book_details['product_page_url'] =product_page_url
+#print(product_page_url)
 
 # Catputre the Book's Universal Product Code
 universal_product_code = soup.find('th',string='UPC').find_next('td').get_text()  
-print(universal_product_code)
+book_details['universal_product_code'] =universal_product_code
+#print(universal_product_code)
 
 # Catputre the Book's Title
 book_title = soup.h1.string
-print(book_title)
+book_details['book_title'] =book_title
+#print(book_title)
 
 # Catputre the Book Price, including tax
 price_including_tax = soup.find('th', string='Price (incl. tax)').find_next('td').get_text()
-print(price_including_tax)
+book_details['price_including_tax'] =price_including_tax
+#print(price_including_tax)
 
 # Catputre the Book Price, excluding tax
 price_excluding_tax = soup.find('th', string='Price (excl. tax)').find_next('td').get_text()
-print(price_excluding_tax)
+book_details['price_excluding_tax'] =price_excluding_tax
+#print(price_excluding_tax)
 
 # Capature the Number of Books Available
 quantity_available = soup.find('th', string='Availability').find_next('td').get_text()
+book_details['quantity_available'] =quantity_available
 #print(quantity_available)
 
 # Capture the Book's Description
 
-product_descriptions = soup.find_all('p', id='product_description')
-for product_description in product_descriptions:
-    print(product_description)
+product_description = soup.find('div', id='product_description')
+product_description_contents = product_description.find_next_sibling('p').text
+book_details['product_description'] = product_description_contents
+
+#print(book_details["product_description"])
+
+print(book_details)  
 
 """# Capture the Book's Category
 book_categories = soup.find_all('a')
