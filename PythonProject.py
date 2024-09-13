@@ -2,6 +2,7 @@
 import pandas
 from bs4 import BeautifulSoup
 from requests import get
+import csv
 
 # Create Book Details Dictionary
 book_details = {
@@ -81,10 +82,31 @@ else:
     # Handle the case when the review rating element is not found
     book_details['review_rating'] = 'Rating information not available'
 
+#Capture the image URL
+image_url = soup.find('img')
+book_details['image_url'] = image_url
 
+#Create CSV file
+#CSV Header
+header = book_details.keys()
+#CSV A Light in the Attic Row
+with open("ALightInTheAticBookDetails", "w", newline='') as book_details_file:
+    writer = csv.writer(book_details_file, delimiter=',')
+    writer.writerow(book_details)
+#Create CSV file
+#CSV Header
+header = book_details.keys()
+#CSV A Light in the Attic Row
+with open("ALightInTheAticBookDetails.csv", "w", newline='') as book_details_file:
+    writer = csv.writer(book_details_file, delimiter=',')
+    writer.writerow(book_details)
+    writer.writerow(list(book_details.values()))
+    """
+    #Code to create new line for each dictionary item. 
+    for value in book_details.values():
+        writer.writerow([value])"""
+book_details_file.close()
 
-#Print the Book Details
-print(book_details)      
 
 
 
@@ -146,3 +168,4 @@ price_including_tax
 
 #print Book Details
 #print (book_details.keys())
+#test git hub
